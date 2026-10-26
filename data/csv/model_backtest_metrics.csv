@@ -1,0 +1,23 @@
+series_code,series,model,chosen,n_tests,mae,rmse,bias,share_within_tolerance,skill_vs_naive,error_unit
+EG_ACS_ELEC,Access to electricity (%),naive,False,2170,2.0253,4.4188,-1.8058,0.7885,0.0,percentage points
+EG_ACS_ELEC,Access to electricity (%),drift,True,2170,1.2029,3.1071,-0.1336,0.8811,0.406,percentage points
+EG_ACS_ELEC,Access to electricity (%),damped,False,2170,1.2911,3.268,-0.7141,0.8756,0.3625,percentage points
+EG_ACS_ELEC,Access to electricity (%),logistic,False,2170,1.4315,3.0448,-0.5199,0.877,0.2932,percentage points
+EG_EGY_CLEAN,Access to clean cooking fuels and technology (%),naive,False,1940,1.9923,3.5157,-1.8985,0.8077,0.0,percentage points
+EG_EGY_CLEAN,Access to clean cooking fuels and technology (%),drift,False,1940,1.1102,2.1398,-0.0779,0.9134,0.4427,percentage points
+EG_EGY_CLEAN,Access to clean cooking fuels and technology (%),damped,False,1940,1.1466,2.153,-0.7639,0.9,0.4245,percentage points
+EG_EGY_CLEAN,Access to clean cooking fuels and technology (%),logistic,True,1940,1.0258,1.8723,-0.1833,0.9232,0.4851,percentage points
+EG_FEC_RNEW,Renewable share of final energy consumption (%),naive,True,2118,2.0623,3.2671,0.0933,0.7691,0.0,percentage points
+EG_FEC_RNEW,Renewable share of final energy consumption (%),drift,False,2118,2.2498,3.5009,-0.2369,0.7351,-0.0909,percentage points
+EG_FEC_RNEW,Renewable share of final energy consumption (%),damped,False,2118,2.0431,3.2085,-0.1127,0.7639,0.0093,percentage points
+EG_FEC_RNEW,Renewable share of final energy consumption (%),logistic,False,2118,2.4278,3.9102,0.0834,0.7205,-0.1772,percentage points
+EG_EGY_PRIM,Energy intensity (MJ per 2021 PPP $),naive,True,1924,0.0881,0.1563,0.0274,0.6965,0.0,relative error
+EG_EGY_PRIM,Energy intensity (MJ per 2021 PPP $),drift,False,1924,0.1054,0.1846,-0.0217,0.6715,-0.1966,relative error
+EG_EGY_PRIM,Energy intensity (MJ per 2021 PPP $),damped,False,1924,0.0922,0.1682,-0.0046,0.7245,-0.0471,relative error
+EG_EGY_PRIM,Energy intensity (MJ per 2021 PPP $),growth,False,1916,0.0971,0.1715,-0.0034,0.7046,-0.1019,relative error
+EG_EGY_PRIM,Energy intensity (MJ per 2021 PPP $),damped_growth,False,1916,0.0876,0.1581,0.0073,0.7323,0.0054,relative error
+EG_EGY_RNEW,Renewable capacity (W per person),naive,False,2204,0.2407,0.5555,-0.1879,0.4519,0.0,relative error
+EG_EGY_RNEW,Renewable capacity (W per person),drift,False,2204,0.2378,0.6764,-0.083,0.4206,0.0121,relative error
+EG_EGY_RNEW,Renewable capacity (W per person),damped,True,2204,0.2303,0.623,-0.1224,0.4492,0.0433,relative error
+EG_EGY_RNEW,Renewable capacity (W per person),growth,False,1915,0.4934,1.8373,0.3154,0.4334,-1.0497,relative error
+EG_EGY_RNEW,Renewable capacity (W per person),damped_growth,False,1915,0.2477,0.505,0.029,0.4637,-0.029,relative error
