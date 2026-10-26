@@ -1,0 +1,161 @@
+{
+ "built": "2026-10-26T22:09:43+00:00",
+ "release": "2026.Q3.G.01",
+ "data": {
+  "fetched": "2026-10-26T21:40:00+00:00",
+  "population_updated": "2026-10-08",
+  "observations": 88439,
+  "series": {
+   "EG_ACS_ELEC": {
+    "label": "Access to electricity (%)",
+    "rows_from_un": 18825,
+    "countries": 217,
+    "countries_total": 235,
+    "latest_year": 2024,
+    "countries_current": 217
+   },
+   "EG_EGY_CLEAN": {
+    "label": "Access to clean cooking fuels and technology (%)",
+    "rows_from_un": 16275,
+    "countries": 194,
+    "countries_total": 235,
+    "latest_year": 2024,
+    "countries_current": 194
+   },
+   "EG_FEC_RNEW": {
+    "label": "Renewable share of final energy consumption (%)",
+    "rows_from_un": 9343,
+    "countries": 231,
+    "countries_total": 235,
+    "latest_year": 2024,
+    "countries_current": 226
+   },
+   "EG_EGY_PRIM": {
+    "label": "Energy intensity (MJ per 2021 PPP $)",
+    "rows_from_un": 9343,
+    "countries": 207,
+    "countries_total": 235,
+    "latest_year": 2024,
+    "countries_current": 207
+   },
+   "EG_EGY_RNEW": {
+    "label": "Renewable capacity (W per person)",
+    "rows_from_un": 89600,
+    "countries": 223,
+    "countries_total": 235,
+    "latest_year": 2024,
+    "countries_current": 223
+   },
+   "EG_IFF_RANDN": {
+    "label": "International clean-energy finance received (million 2023 US$)",
+    "rows_from_un": 36200,
+    "countries": 112,
+    "countries_total": 235,
+    "latest_year": 2024,
+    "countries_current": 112
+   }
+  }
+ },
+ "model": {
+  "EG_ACS_ELEC": {
+   "label": "Access to electricity (%)",
+   "chosen": "drift",
+   "unit": "points",
+   "tolerance": 3.0,
+   "mae": 1.2029,
+   "skill_vs_naive": 0.406,
+   "within_tol": 0.8811,
+   "interval_coverage_80": 0.8737,
+   "n": 2170,
+   "forecasts": 250
+  },
+  "EG_EGY_CLEAN": {
+   "label": "Access to clean cooking fuels and technology (%)",
+   "chosen": "logistic",
+   "unit": "points",
+   "tolerance": 3.0,
+   "mae": 1.0258,
+   "skill_vs_naive": 0.4851,
+   "within_tol": 0.9232,
+   "interval_coverage_80": 0.8959,
+   "n": 1940,
+   "forecasts": 217
+  },
+  "EG_FEC_RNEW": {
+   "label": "Renewable share of final energy consumption (%)",
+   "chosen": "naive",
+   "unit": "points",
+   "tolerance": 3.0,
+   "mae": 2.0623,
+   "skill_vs_naive": 0.0,
+   "within_tol": 0.7691,
+   "interval_coverage_80": 0.8391,
+   "n": 2118,
+   "forecasts": 266
+  },
+  "EG_EGY_PRIM": {
+   "label": "Energy intensity (MJ per 2021 PPP $)",
+   "chosen": "naive",
+   "unit": "relative",
+   "tolerance": 0.1,
+   "mae": 0.0881,
+   "skill_vs_naive": 0.0,
+   "within_tol": 0.6965,
+   "interval_coverage_80": 0.7357,
+   "n": 1924,
+   "forecasts": 247
+  },
+  "EG_EGY_RNEW": {
+   "label": "Renewable capacity (W per person)",
+   "chosen": "damped",
+   "unit": "relative",
+   "tolerance": 0.1,
+   "mae": 0.2303,
+   "skill_vs_naive": 0.0433,
+   "within_tol": 0.4492,
+   "interval_coverage_80": 0.8706,
+   "n": 2204,
+   "forecasts": 256
+  }
+ },
+ "impact": {
+  "world_electricity_pct": 91.9,
+  "world_electricity_year": 2024,
+  "world_electricity_2030": 95.01,
+  "world_clean_cooking_pct": 75.0,
+  "world_clean_cooking_year": 2024,
+  "world_renewable_share_pct": 18.0,
+  "world_renewable_share_year": 2023,
+  "people_without_electricity": 655233894,
+  "people_without_electricity_2030": 574016729,
+  "people_without_clean_cooking": 1989975516,
+  "countries_electricity": {
+   "Achieved": 138,
+   "On track": 20,
+   "At risk": 9,
+   "Off track": 50
+  },
+  "countries_clean_cooking": {
+   "Achieved": 63,
+   "On track": 1,
+   "At risk": 26,
+   "Off track": 104
+  }
+ },
+ "pipeline": {
+  "fetch_seconds": 420,
+  "build_seconds": 0.5,
+  "csv_files": [
+   "business_cooking.csv",
+   "business_finance.csv",
+   "business_offgrid.csv",
+   "business_sourcing.csv",
+   "country_latest.csv",
+   "forecasts_to_2030.csv",
+   "model_backtest_metrics.csv",
+   "population.csv",
+   "sdg7_observations.csv",
+   "series_dictionary.csv"
+  ]
+ }
+}

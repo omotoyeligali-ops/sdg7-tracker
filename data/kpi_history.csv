@@ -1,0 +1,2 @@
+built,release,observations,world_electricity_pct,people_without_electricity,people_without_clean_cooking,countries_off_track_electricity,countries_off_track_cooking,mae_electricity_pts,skill_electricity,mae_cooking_pts,skill_cooking,build_seconds
+2026-10-26T22:09:43+00:00,2026.Q3.G.01,88439,91.9,655233894,1989975516,50,104,1.2029,0.406,1.0258,0.4851,0.5
