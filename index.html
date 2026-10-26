@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SDG 7 Energy Tracker</title>
+<meta name="description" content="Track every country's progress on UN Sustainable Development Goal 7, forecast to 2030, and find energy-access markets, green power locations and finance gaps.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <div class="brand">
+      <span class="goal-badge" aria-hidden="true">7</span>
+      <div>
+        <h1>SDG 7 Energy Tracker</h1>
+        <p class="tagline">Affordable, reliable, sustainable and modern energy for all, by 2030</p>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <nav class="tabs" aria-label="Views">
+      <button class="tab" data-view="overview" aria-selected="true">Overview</button>
+      <button class="tab" data-view="profile" aria-selected="false">Country profile</button>
+      <button class="tab" data-view="market" aria-selected="false">Market finder</button>
+      <button class="tab" data-view="gaps" aria-selected="false">Gap finder</button>
+      <button class="tab" data-view="perf" aria-selected="false">App performance</button>
+    </nav>
+  </div>
+</header>
+
+<div id="banner" class="banner" hidden></div>
+
+<main class="wrap">
+  <p id="status" class="loading">Loading UN SDG data…</p>
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <section id="view-overview" class="view" hidden>
+    <div class="section-head">
+      <h2 class="h-lg">Where the world stands on Goal 7</h2>
+      <p id="ov-meta" class="meta"></p>
+    </div>
+    <div id="ov-kpis" class="kpi-grid"></div>
+    <div class="split two">
+      <div class="panel">
+        <h3>Countries by electricity-access status</h3>
+        <div id="ov-status-elec"></div>
+        <h3 class="mt">Countries by clean-cooking status</h3>
+        <div id="ov-status-cook"></div>
+        <p class="note">Status uses the model's 2030 forecast. <b>At risk</b> means the central forecast misses 99% but the upper end of the 80% range reaches it.</p>
+      </div>
+      <div class="panel">
+        <h3>Top markets right now</h3>
+        <div id="ov-top"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COUNTRY PROFILE ===================== -->
+  <section id="view-profile" class="view" hidden>
+    <div class="picker-row">
+      <div class="picker">
+        <label for="country" class="eyebrow">Country or region</label>
+        <select id="country"></select>
+        <p id="place-meta" class="meta"></p>
+      </div>
+      <div class="live-box">
+        <button id="live-refresh" class="btn ghost">Refresh from UN now</button>
+        <p id="live-msg" class="meta small"></p>
+      </div>
+    </div>
+
+    <div id="tiles" class="tiles" role="list"></div>
+
+    <div class="panel chart-panel">
+      <div class="panel-head">
+        <div>
+          <h3 id="chart-title">Access to electricity</h3>
+          <p id="chart-sub" class="meta"></p>
+        </div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="chart-box"><canvas id="trend" aria-label="Trend and forecast chart"></canvas></div>
+      <p id="chart-note" class="note"></p>
+    </div>
+
+    <div class="split">
+      <div class="panel">
+        <h3>What it would take</h3>
+        <div id="pace"></div>
+      </div>
+      <div class="panel">
+        <h3>Urban and rural gap</h3>
+        <div id="urbanrural"></div>
+      </div>
+      <div class="panel">
+        <h3>Renewable capacity by source</h3>
+        <p class="meta">Watts of installed capacity per person</p>
+        <div id="techmix"></div>
+      </div>
+      <div class="panel">
+        <h3>Clean-energy finance received</h3>
+        <p class="meta">International public finance, indicator 7.a.1</p>
+        <div id="finance"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MARKET FINDER ===================== -->
+  <section id="view-market" class="view" hidden>
+    <div class="section-head">
+      <h2 class="h-lg">Market finder</h2>
+      <p class="meta">Rank countries for a business decision. Every score is a weighted mix of the measures listed; change the weights to match your strategy.</p>
+    </div>
+    <div id="lens-picker" class="lens-grid" role="radiogroup" aria-label="Business question"></div>
+
+    <div class="market-layout">
+      <aside class="panel side">
+        <h3>Weights</h3>
+        <div id="weights"></div>
+        <button id="weights-reset" class="btn ghost small">Reset weights</button>
+        <div id="assumptions-box">
+          <h3 class="mt">Market sizing assumptions</h3>
+          <p class="meta small">Illustrative. Replace with your own unit economics.</p>
+          <div class="field"><label for="a-hh" class="eyebrow">People per household</label><input id="a-hh" type="number" min="1" max="12" step="0.1" value="4.5"></div>
+          <div class="field"><label for="a-spend" class="eyebrow">Spend per household, US$ a year</label><input id="a-spend" type="number" min="0" step="5" value="60"></div>
+          <div class="field"><label for="a-share" class="eyebrow">Share you can reach, %</label><input id="a-share" type="number" min="0" max="100" step="1" value="10"></div>
+        </div>
+      </aside>
+      <div class="market-main">
+        <div class="controls">
+          <div class="field"><label for="m-region" class="eyebrow">Region</label><select id="m-region"></select></div>
+          <div class="field"><label for="m-group" class="eyebrow">UN country group</label>
+            <select id="m-group">
+              <option value="">All countries</option>
+              <option value="ldc">Least developed (LDC)</option>
+              <option value="lldc">Landlocked developing (LLDC)</option>
+              <option value="sids">Small island developing (SIDS)</option>
+            </select></div>
+          <div class="field grow"><label for="m-search" class="eyebrow">Search</label><input id="m-search" type="search" placeholder="Country name"></div>
+        </div>
+        <div id="m-summary" class="summary"></div>
+        <div class="table-wrap"><table id="m-table"><thead></thead><tbody></tbody></table></div>
+        <div class="table-foot">
+          <p class="meta">Select a row to open that country's profile.</p>
+          <button id="m-copy" class="btn">Copy as CSV</button>
+          <button id="m-download" class="btn ghost">Download CSV</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GAP FINDER ===================== -->
+  <section id="view-gaps" class="view" hidden>
+    <div class="controls">
+      <div class="field"><label for="g-indicator" class="eyebrow">Indicator</label><select id="g-indicator"></select></div>
+      <div class="field"><label for="g-region" class="eyebrow">Region</label><select id="g-region"></select></div>
+      <div class="field"><label for="g-status" class="eyebrow">Status</label><select id="g-status"></select></div>
+      <div class="field grow"><label for="g-search" class="eyebrow">Search</label><input id="g-search" type="search" placeholder="Country name"></div>
+    </div>
+    <div id="g-summary" class="summary"></div>
+    <div class="table-wrap">
+      <table id="g-table">
+        <thead><tr>
+          <th data-sort="name">Country</th>
+          <th data-sort="region">Region</th>
+          <th data-sort="latest" class="num">Latest</th>
+          <th data-sort="change" class="num">Change since 2015</th>
+          <th data-sort="proj" class="num">2030 forecast</th>
+          <th data-sort="status">Status</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="table-foot">
+      <p class="meta">Select a row to open that country's profile.</p>
+      <button id="g-copy" class="btn">Copy as CSV</button>
+      <button id="g-download" class="btn ghost">Download CSV</button>
+    </div>
+  </section>
+
+  <!-- ===================== APP PERFORMANCE ===================== -->
+  <section id="view-perf" class="view" hidden>
+    <div class="section-head">
+      <h2 class="h-lg">App performance</h2>
+      <p class="meta">KPIs for the data, the forecasting model and the update pipeline. Definitions are at the bottom.</p>
+    </div>
+    <div id="perf-kpis" class="kpi-grid"></div>
+    <div class="panel">
+      <h3>Data coverage by indicator</h3>
+      <div class="table-wrap flat"><table id="perf-cov"></table></div>
+    </div>
+    <div class="panel">
+      <h3>Forecast accuracy (back-test)</h3>
+      <p class="meta">Each model was fitted on data up to 2014 and up to 2019, then scored on the next five years the UN actually reported.</p>
+      <div class="table-wrap flat"><table id="perf-model"></table></div>
+    </div>
+    <div class="panel">
+      <h3>Update history</h3>
+      <p class="meta">One row per pipeline run. The scheduled job checks the UN every week and rebuilds when a new release appears.</p>
+      <div class="table-wrap flat"><table id="perf-hist"></table></div>
+    </div>
+    <div class="panel">
+      <h3>KPI definitions</h3>
+      <dl id="perf-defs" class="defs"></dl>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>Data: <a href="https://unstats.un.org/sdgs/dataportal" target="_blank" rel="noopener">UN Global SDG Indicators Database</a>
+  (custodians: World Bank, WHO, IEA, IRENA, UNSD, OECD) and World Bank population (UN World Population Prospects).
+  <span id="data-date"></span> Forecasts are statistical extrapolations with measured error, not official projections.</p>
+</footer>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
