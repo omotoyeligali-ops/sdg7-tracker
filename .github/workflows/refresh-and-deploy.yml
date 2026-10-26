@@ -1,0 +1,105 @@
+# Keeps the app up to date with the UN SDG database and publishes it on GitHub Pages.
+#
+#  * Every Monday it asks the UN API which data release is current.
+#    If it is new, it downloads the data, re-runs the model, rebuilds the CSVs and KPIs,
+#    commits the results, and redeploys the site. If nothing changed it only logs the check.
+#  * It also redeploys whenever you push a change to the main branch.
+#  * Run it by hand from the Actions tab ("Run workflow"); tick "force" to rebuild anyway.
+#
+# One-time setup: Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
+# GitHub emails the repository owner if a scheduled run fails.
+
+name: Refresh UN data and deploy
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"          # Mondays 06:17 UTC
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Rebuild even if the UN release has not changed"
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+
+permissions:
+  contents: write                # commit refreshed data
+  pages: write                   # deploy to GitHub Pages
+  id-token: write
+
+concurrency:
+  group: refresh-and-deploy
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests numpy
+
+      - name: Download data from the UN (skips if release unchanged)
+        id: fetch
+        run: |
+          set +e
+          python scripts/fetch_data.py ${{ inputs.force && '--force' || '' }}
+          code=$?
+          set -e
+          if [ "$code" = "3" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          elif [ "$code" = "0" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            python scripts/log_run.py failed
+            exit "$code"
+          fi
+
+      - name: Run model, scores, KPIs and CSV exports
+        if: steps.fetch.outputs.changed == 'true'
+        run: python scripts/build.py
+
+      - name: Log this run
+        run: python scripts/log_run.py ${{ steps.fetch.outputs.changed == 'true' && 'updated' || 'no-change' }}
+
+      - name: Commit results
+        run: |
+          git config user.name  "sdg7-bot"
+          git config user.email "sdg7-bot@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet && exit 0
+          release=$(python -c "import json;print(json.load(open('data/sdg7.json'))['release'])")
+          git commit -m "Data refresh: UN release ${release} (${{ steps.fetch.outputs.changed == 'true' && 'updated' || 'checked' }})"
+          git push
+
+  deploy:
+    needs: refresh
+    if: always() && (needs.refresh.result == 'success' || needs.refresh.result == 'skipped')
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main                # includes the commit made by the refresh job
+
+      - name: Prepare site files
+        run: |
+          mkdir _site
+          cp -r index.html style.css app.js config.js data _site/
+          rm -rf _site/data/raw
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
